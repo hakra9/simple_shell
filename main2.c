@@ -8,7 +8,7 @@
 int main(int argc, char **argv, char **env)
 {
     char *buf = NULL;
-    size_t buf_size = 0;
+    size_t buf_size = 0, length;
     char **array;
     int n_char;
     char *prog_name, *temp;
@@ -26,11 +26,20 @@ int main(int argc, char **argv, char **env)
         n_char = getline(&buf, &buf_size, stdin);
         if (n_char == -1) 
         {
-            write(STDOUT_FILENO, "\n", 1);
+            /*write(STDOUT_FILENO, "\n", 1);*/
             break;
         }
-        if (buf[strlen(buf) - 1] == '\n')
-            buf[strlen(buf) - 1] = '\0';
+        length = strlen(buf);
+        /**if (length > 0 && buf[length - 1] == '\n') {
+            buf[length - 1] = '\0';
+            length--;
+        }*/
+        while (length > 0 && (buf[length - 1] == ' ' || buf[length - 1] == '\t' || buf[length - 1] == '\n')) {
+            buf[length - 1] = '\0';
+            length--;
+        }
+        if (buf[0] == '\0')
+            break;
         array = tokenize(buf, buf_size);
         if (strstr(array[0], "/") == NULL){
             if (built_ins(array, env) == 1)
