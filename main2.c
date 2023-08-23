@@ -1,43 +1,29 @@
 #include "main.h"
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdio.h>
-#include <stdlib.h>
-
+/**
+ * main - Entry point of the shell program.
+ * @argc: The number of command-line arguments.
+ * @argv: An array of command-line argument strings.
+ * @env: An array of environment variable strings.
+ * Return: Always returns 0.
+ */
 int main(int argc, char **argv, char **env)
 {
-	char *buf = NULL;
+	char *buf = NULL, **array, *prog_name, *temp;
 	size_t buf_size = 0, length;
-	char **array;
-	int n_char;
-	char *prog_name, *temp;
-	int mode;
+	int n_char, mode;
+
 	prog_name = argv[0];
-	if (isatty(fileno(stdin)))
-	{
-		mode = 1;
-	}
-	else
-	{
-		mode = 0;
-	}
+	mode = determine_mode();
 	while (1)
 	{
 		if (mode == 1 && argc > 0)
 			display_prompt();
 		n_char = getline(&buf, &buf_size, stdin);
 		if (n_char == -1)
-		{
-		/*write(STDOUT_FILENO, "\n", 1);*/
 			break;
-		}
 		length = strlen(buf);
-		/**if (length > 0 && buf[length - 1] == '\n')
-		 * buf[length - 1] = '\0';
-		 * length--;
-		 * */
-		while (length > 0 && (buf[length - 1] == ' ' || buf[length - 1] == '\t' || buf[length - 1] == '\n'))
+		while (length > 0 && (buf[length - 1] == ' ' ||
+				 buf[length - 1] == '\t' || buf[length - 1] == '\n'))
 		{
 			buf[length - 1] = '\0';
 			length--;
@@ -50,10 +36,7 @@ int main(int argc, char **argv, char **env)
 			if (built_ins(array, env) == 1)
 				temp = find_path(env, array[0]);
 			if (temp == NULL && mode == 0)
-			{
-				fprintf(stderr, "%s: 1: %s: not found\n", prog_name, array[0]);
-				exit(127);
-			}
+				handle_command_not_found_error(prog_name, array[0]);
 			if (temp != NULL)
 				array[0] = find_path(env, array[0]);
 		}
@@ -63,4 +46,3 @@ int main(int argc, char **argv, char **env)
 	free(buf);
 	return (0);
 }
-
