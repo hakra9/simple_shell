@@ -5,11 +5,11 @@
  * print_environment - show the info of env
  */
 
-void print_environment(char **env) 
+void print_environment(char **env)
 {
-    while (*env) 
-    {
-        printf("%s\n", *env);
-        env++;
-    }
+	while (*env)
+	{
+		printf("%s\n", *env);
+		env++;
+	}
 }
