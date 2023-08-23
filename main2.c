@@ -1,18 +1,11 @@
 #include "main.h"
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 int main(int argc, char **argv, char **env)
 {
-	char *buf = NULL;
+	char *buf = NULL, **array, *prog_name, *temp;
 	size_t buf_size = 0, length;
-	char **array;
-	int n_char;
-	char *prog_name, *temp;
-	int mode;
+	int mode, n_char;
+
 	prog_name = argv[0];
 	if (isatty(fileno(stdin)))
 	{
@@ -29,14 +22,9 @@ int main(int argc, char **argv, char **env)
 		n_char = getline(&buf, &buf_size, stdin);
 		if (n_char == -1)
 		{
-		/*write(STDOUT_FILENO, "\n", 1);*/
 			break;
 		}
 		length = strlen(buf);
-		/**if (length > 0 && buf[length - 1] == '\n')
-		 * buf[length - 1] = '\0';
-		 * length--;
-		 * */
 		while (length > 0 && (buf[length - 1] == ' ' || buf[length - 1] == '\t' || buf[length - 1] == '\n'))
 		{
 			buf[length - 1] = '\0';
