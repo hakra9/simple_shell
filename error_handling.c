@@ -1,5 +1,4 @@
 #include "main.h"
-#include <errno.h>
 /**
  * handle_command_not_found_error - Handles and displays a cmnd
  * @prog_name: Name of the program (typically argv[0])
@@ -10,5 +9,5 @@
 void handle_command_not_found_error(char *prog_name, char *command)
 {
 	fprintf(stderr, "%s: 1: %s: not found\n", prog_name, command);
-		exit(errno);
+		exit(127);
 }
