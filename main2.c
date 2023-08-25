@@ -8,7 +8,7 @@
  */
 int main(int argc, char **argv, char **env)
 {
-	char *buf = NULL, **array, *prog_name, *temp = NULL;
+	char *buf = NULL, **array, *prog_name, *temp;
 	size_t buf_size = 0, length;
 	int n_char, mode, is_builtin;
 
@@ -33,14 +33,14 @@ int main(int argc, char **argv, char **env)
 		array = tokenize(buf, buf_size);
 		if (strstr(array[0], "/") == NULL)
 		{	is_builtin = built_ins(array, env);
-			if (is_builtin == 0){
+			if (is_builtin == 1){
 				temp = find_path(env, array[0]);
 			if (temp == NULL && mode == 0)
 				handle_command_not_found_error(prog_name, array[0]);
 			if (temp != NULL)
 				array[0] = find_path(env, array[0]);
 			}
-			if (is_builtin == 1)
+			if (is_builtin == 0)
 				free(array);
 		}
 		if (array){
