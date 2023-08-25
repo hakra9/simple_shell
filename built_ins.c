@@ -19,7 +19,7 @@ int built_ins(char **array, char **env)
 		printf("%s\n", *env);
 		env++;
 		}
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }
